@@ -1,0 +1,21 @@
+{
+  "name": "clase-36-proyecto-final",
+  "version": "1.0.0",
+  "description": "Proyecto final Coderhouse",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brotzumax/Clase-36-Proyecto-Final.git"
+  },
+  "author": "Brotzu Maximiliano",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brotzumax/Clase-36-Proyecto-Final/issues"
+  },
+  "homepage": "https://github.com/brotzumax/Clase-36-Proyecto-Final#readme"
+}
