@@ -47,4 +47,9 @@ routerSession.post('/login', passport.authenticate('login', { failureRedirect: '
     return res.redirect('/home');
 });
 
+routerSession.get('/logout', (req, res) => {
+    req.logout(() => { });
+    res.redirect('login');
+});
+
 export default routerSession;
