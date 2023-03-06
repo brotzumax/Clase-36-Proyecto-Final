@@ -2,8 +2,13 @@ import express from 'express';
 import bcrypt from "bcrypt";
 //MongoDb
 import User from "../../db/models/user.js";
+//Passport
+import passport from 'passport';
+import configurePassport from '../passport-config.js';
+
 
 const routerSession = express.Router();
+configurePassport(passport);
 
 //Registro
 routerSession.get('/signup', (req, res) => {
@@ -31,7 +36,15 @@ routerSession.post('/signup', async (req, res) => {
 
 //Inicio Sesion
 routerSession.get('/login', (req, res) => {
-    res.render('login');
+    let failLogin = false;
+    if (req.query.error) {
+        failLogin = true;
+    }
+    res.render('login', { failLogin });
+});
+
+routerSession.post('/login', passport.authenticate('login', { failureRedirect: 'login?error=true' }), (req, res) => {
+    return res.redirect('/home');
 });
 
 export default routerSession;

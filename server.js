@@ -2,7 +2,7 @@ import app from "./server/app.js"
 
 //Peticiones
 app.get('/', (req, res) => {
-    res.send("Servidor funcionando");
+    res.redirect("/session/login");
 });
 
 app.listen(8080, () => {
