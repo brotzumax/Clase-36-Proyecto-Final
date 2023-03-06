@@ -22,4 +22,10 @@ routerHome.get("/", (req, res) => {
     res.render('home', { username });
 });
 
+//Userinfo
+routerHome.get("/info", (req, res) => {
+    const user = req.user;
+    res.render('userinfo', { user });
+})
+
 export default routerHome;

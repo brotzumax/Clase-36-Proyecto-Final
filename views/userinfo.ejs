@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Información de cuenta</title>
+
+  <style>
+    .infoUser {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Datos de la cuenta</h2>
+  <div class="infoUser">
+    <span>Nombre: <%= user.name%></span>
+    <span>Email: <%= user.email%></span>
+    <span>Edad: <%= user.age%></span>
+    <span>Número de teléfono: <%= user.telephone%></span>
+  </div>
+</body>
+
+</html>
