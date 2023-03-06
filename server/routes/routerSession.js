@@ -5,10 +5,17 @@ import User from "../../db/models/user.js";
 //Passport
 import passport from 'passport';
 import configurePassport from '../passport-config.js';
-
+//Nodemailer
+import SendAdminMail from '../nodeMailer.js';
 
 const routerSession = express.Router();
 configurePassport(passport);
+
+function newUserMail(newUser) {
+    const sendAdminMail = new SendAdminMail();
+    sendAdminMail.newRegister(newUser);
+    sendAdminMail.sendMail();
+}
 
 //Registro
 routerSession.get('/signup', (req, res) => {
@@ -28,6 +35,7 @@ routerSession.post('/signup', async (req, res) => {
         const passwordHash = bcrypt.hashSync(newUser.password, 10);
         newUser.password = passwordHash;
         await new User(newUser).save();
+        newUserMail(newUser);
         return res.send({ message: 'Registro exitoso' });
     } catch (error) {
         console.log(error);
