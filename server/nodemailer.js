@@ -30,6 +30,19 @@ class SendAdminMail {
         </div>`;
     }
 
+    newPurchase(userData, products) {
+        this.mailOptions.subject = `Nuevo pedido de ${userData.name} ${userData.email}`;
+        this.mailOptions.html = this.generateHtmlProducts(products);
+    }
+
+    generateHtmlProducts(products) {
+        let html = "<h2>Productos</h2>";
+        for (let i = 0; i < products.length; i++) {
+            html += `<span>${products[i].name}</span><br/>`;
+        };
+        return html;
+    }
+
     async sendMail() {
         try {
             const info = await this.transporter.sendMail(this.mailOptions);
