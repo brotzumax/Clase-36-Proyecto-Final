@@ -6,6 +6,8 @@ import configurePassport from '../passport-config.js';
 import generateProducts from '../../db/fakerProducts.js';
 //Nodemailer
 import SendAdminMail from '../nodeMailer.js';
+//Twilio
+import PhoneMessagesServices from '../phoneMessages.js';
 
 const routerHome = express.Router();
 configurePassport(passport);
@@ -19,9 +21,15 @@ function checkAuthentication(req, res, next) {
 }
 
 function newPurchase(userdata, products) {
+    //Envío de Email
     const sendAdminMail = new SendAdminMail();
     sendAdminMail.newPurchase(userdata, products);
     sendAdminMail.sendMail();
+
+    //Envío de mensajes a teléfonos
+    /* const phoneMessagesServices = new PhoneMessagesServices();
+    phoneMessagesServices.SendClientMessage(userdata.telephone);
+    phoneMessagesServices.SendAdminWhatsapp(userdata); */
 }
 
 routerHome.use(checkAuthentication);
