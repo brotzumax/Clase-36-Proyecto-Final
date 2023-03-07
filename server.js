@@ -3,6 +3,9 @@ import app from "./server/app.js"
 import minimist from 'minimist';
 import cluster from 'cluster';
 import os from 'os';
+//Winston
+import logger from "./server/loggers.js"
+
 
 //Cluster
 const argv = minimist(process.argv.slice(2), { alias: { m: 'modo' } });
@@ -17,19 +20,19 @@ app.get('/', (req, res) => {
 //Inicio de servidor
 if (isClusterEnabled) {
     if (cluster.isMaster) {
-        console.log("Servidor modo cluster");
-        console.log(`Master ${process.pid} is running`);
+        logger.info("Servidor modo cluster");
+        logger.info(`Master ${process.pid} is running`);
 
         for (let i = 0; i < numCPUs; i++) {
             cluster.fork();
         }
 
         cluster.on('exit', (worker, code, signal) => {
-            console.log(`Worker ${worker.process.pid} died`);
+            logger.info(`Worker ${worker.process.pid} died`);
         });
     }
 } else {
     app.listen(8080, () => {
-        console.log('Servidor iniciado en el puerto 8080');
+        logger.info('Servidor iniciado en el puerto 8080');
     });
 }

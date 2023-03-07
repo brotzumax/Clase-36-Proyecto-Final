@@ -1,5 +1,7 @@
 import { createTransport } from "nodemailer";
 import 'dotenv/config';
+//Winston
+import logger from "./loggers.js";
 
 class SendAdminMail {
     constructor() {
@@ -46,9 +48,9 @@ class SendAdminMail {
     async sendMail() {
         try {
             const info = await this.transporter.sendMail(this.mailOptions);
-            console.log(info);
+            logger.info(info);
         } catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 }

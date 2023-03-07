@@ -1,5 +1,7 @@
 import twilio from "twilio";
 import 'dotenv/config';
+//Winston
+import logger from "./loggers.js";
 
 class PhoneMessagesServices {
     constructor() {
@@ -13,9 +15,9 @@ class PhoneMessagesServices {
                 from: process.env.TWILIO_PHONE_NUMBER,
                 to: clientNumber
             });
-            console.log(message);
+            logger.info(message);
         } catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 
@@ -26,9 +28,9 @@ class PhoneMessagesServices {
                 from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
                 to: `whatsapp:${process.env.ADMIN_PHONE_NUMBER}`
             });
-            console.log(message);
+            logger.info(message);
         } catch (error) {
-            console.log(error);
+            logger.error(error);
         }
     }
 }

@@ -7,6 +7,8 @@ import passport from 'passport';
 import configurePassport from '../passport-config.js';
 //Nodemailer
 import SendAdminMail from '../nodeMailer.js';
+//Winston
+import logger from "../loggers.js";
 
 const routerSession = express.Router();
 configurePassport(passport);
@@ -38,7 +40,7 @@ routerSession.post('/signup', async (req, res) => {
         newUserMail(newUser);
         return res.send({ message: 'Registro exitoso' });
     } catch (error) {
-        console.log(error);
+        logger.error(error);
     }
 })
 
