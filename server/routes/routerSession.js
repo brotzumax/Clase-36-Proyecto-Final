@@ -38,7 +38,7 @@ routerSession.post('/signup', async (req, res) => {
         newUser.password = passwordHash;
         await new User(newUser).save();
         newUserMail(newUser);
-        return res.send({ message: 'Registro exitoso' });
+        return res.redirect('/session/login');
     } catch (error) {
         logger.error(error);
     }
