@@ -8,6 +8,8 @@ import generateProducts from '../../db/fakerProducts.js';
 import SendAdminMail from '../nodeMailer.js';
 //Twilio
 import PhoneMessagesServices from '../phoneMessages.js';
+//MongoDb
+import User from "../../db/models/user.js";
 
 const routerHome = express.Router();
 configurePassport(passport);
@@ -19,6 +21,28 @@ function checkAuthentication(req, res, next) {
         res.redirect('/session/login');
     }
 }
+
+function agregarProducto(userEmail, nuevoProducto) {
+    User.findOne({ email: userEmail })
+        .then(user => {
+            user.cart.push(nuevoProducto);
+            user.save();
+        });
+}
+
+async function cargarProductos(userEmail) {
+    const user = await User.findOne({ email: userEmail });
+    return user.cart;
+}
+
+function limpiarCarrito(userEmail) {
+    User.findOne({ email: userEmail })
+        .then(user => {
+            user.cart = [];
+            user.save();
+        });
+}
+
 
 function newPurchase(userdata, products) {
     //Envío de Email
@@ -37,7 +61,7 @@ routerHome.use(checkAuthentication);
 //Home
 routerHome.get("/", (req, res) => {
     const username = req.user.name;
-    res.render('home', { username });
+    res.render('home', { username, products: generateProducts() });
 });
 
 //Userinfo
@@ -47,17 +71,20 @@ routerHome.get("/info", (req, res) => {
 });
 
 //Carrito
-routerHome.get("/cart", (req, res) => {
-    req.user.products = generateProducts();
-    const products = req.user.products;
-    req.session.cart = products; // Guarda el array de productos en la sesión
-    res.render('cart', { products: products });
+routerHome.post("/cart", (req, res) => {
+    const newProduct = req.body;
+    agregarProducto(req.user.email, newProduct);
+    return res.send({ ok: true });
 });
 
-routerHome.post("/purchase", (req, res) => {
-    newPurchase(req.user, req.session.cart);
-    delete req.session.cart; // Borra el campo de datos "cart" de la sesión después de la compra
+routerHome.get("/cart", async (req, res) => {
+    res.render('cart', { products: await cargarProductos(req.user.email) });
+});
+
+routerHome.post("/purchase", async (req, res) => {
+    newPurchase(req.user, await cargarProductos(req.user.email));
+    limpiarCarrito(req.user.email); // Borra el campo de datos "cart" después de la compra
     res.redirect("/home");
-})
+});
 
 export default routerHome;
